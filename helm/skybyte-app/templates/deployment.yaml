@@ -43,9 +43,15 @@ spec:
               value: {{ .Values.apiToken | quote }}
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
