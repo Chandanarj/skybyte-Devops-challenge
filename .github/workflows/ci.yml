@@ -20,23 +20,31 @@ jobs:
 
     # Install dependencies
     - name: Install dependencies
-      run: pip install -r app/requirements.txt
+      run: pip install -r app/requirements.txt pytest
 
     # Run tests
     - name: Run tests
-      run: pytest app/test_main.py
+      run: pytest
 
     # Docker build
     - name: Build Docker image
       run: docker build -t skybyte/app:ci .
 
+    # Setup Helm
+    - name: Setup Helm
+      uses: azure/setup-helm@v4
+
     # Helm lint
     - name: Helm lint
       run: helm lint helm/skybyte-app
+
+    # Setup Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
     # Terraform validate
     - name: Terraform validate
       run: |
         cd terraform
-        terraform init
+        terraform init -backend=false
         terraform validate
