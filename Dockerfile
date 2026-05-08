@@ -1,12 +1,26 @@
-FROM python:3.9
+# Use a small, fixed Python image (no latest)
+FROM python:3.9-slim
 
+# Set working directory
 WORKDIR /app
 
-COPY app/requirements.txt .
-RUN pip install -r requirements.txt
+# Copy only requirements first (better caching)
+COPY requirements.txt .
 
-COPY app/ /app/
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy app code
+COPY app/ .
+
+# Create non-root user
+RUN useradd -m appuser
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
 EXPOSE 80
 
+# Run application
 CMD ["python", "main.py"]
