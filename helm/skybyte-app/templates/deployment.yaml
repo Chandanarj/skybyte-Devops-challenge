@@ -40,7 +40,10 @@ spec:
               protocol: TCP
           env:
             - name: API_TOKEN
-              value: {{ .Values.apiToken | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: skybyte-secret
+                   key: API_TOKEN
           livenessProbe:
             httpGet:
               path: /healthz
