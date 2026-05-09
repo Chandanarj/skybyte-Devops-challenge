@@ -9,42 +9,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    # Python setup
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      # Python setup
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    # Install dependencies
-    - name: Install dependencies
-      run: pip install -r app/requirements.txt pytest
+      # Install dependencies
+      - name: Install dependencies
+        run: pip install -r app/requirements.txt pytest flake8
 
-    # Run tests
-    - name: Run tests
-      run: pytest
+      # Lint Python
+      - name: Lint Python
+        run: flake8 app/
 
-    # Docker build
-    - name: Build Docker image
-      run: docker build -t skybyte/app:ci .
+      # Run tests
+      - name: Run tests
+        run: pytest
 
-    # Setup Helm
-    - name: Setup Helm
-      uses: azure/setup-helm@v4
+      # Docker build
+      - name: Build Docker image
+        run: docker build -t skybyte/app:ci .
 
-    # Helm lint
-    - name: Helm lint
-      run: helm lint helm/skybyte-app
+      # Setup Helm
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
 
-    # Setup Terraform
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+      # Helm lint
+      - name: Helm lint
+        run: helm lint helm/skybyte-app
 
-    # Terraform validate
-    - name: Terraform validate
-      run: |
-        cd terraform
-        terraform init -backend=false
-        terraform validate
+      # Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # Terraform validate
+      - name: Terraform validate
+        run: |
+          cd terraform
+          terraform init -backend=false
+          terraform validate
