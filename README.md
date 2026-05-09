@@ -53,3 +53,22 @@ GitHub Actions runs lint, helm lint, terraform validate, and a Docker build on e
 ├── setup.sh
 └── CHALLENGE.md          ← read this
 ```
+## Improvements Made
+
+- Hardened Docker container security
+- Added Kubernetes securityContext
+- Added CPU and memory resource limits
+- Improved liveness and readiness probes
+- Moved API token to Kubernetes Secret
+- Added Kyverno policies for enforcement
+- Improved CI pipeline with:
+  - pytest
+  - flake8
+  - helm lint
+  - terraform validate
+  - docker build verification
+
+## Documentation
+
+- AUDIT.md
+- DECISIONS.md
